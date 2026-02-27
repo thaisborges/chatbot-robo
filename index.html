@@ -5,135 +5,141 @@
 <title>Chat Bot 🤖</title>
 <style>
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .chat {
-  width: 360px;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+    width: 360px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .header {
-  background: #6c63ff;
-  color: white;
-  padding: 15px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+    background: #6c63ff;
+    color: white;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 22px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
 }
 
 .messages {
-  flex: 1;
-  padding: 15px;
-  overflow-y: auto;
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
 }
 
 .message {
-  margin-bottom: 12px;
-  max-width: 75%;
-  padding: 10px 14px;
-  border-radius: 15px;
-  font-size: 14px;
+    margin-bottom: 12px;
+    max-width: 75%;
+    padding: 10px 14px;
+    border-radius: 15px;
+    font-size: 14px;
 }
 
 .bot {
-  background: #f1f1f1;
+    background: #f1f1f1;
 }
 
 .user {
-  background: #6c63ff;
-  color: white;
-  margin-left: auto;
+    background: #6c63ff;
+    color: white;
+    margin-left: auto;
 }
 
 .input-area {
-  display: flex;
-  padding: 10px;
-  border-top: 1px solid #eee;
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #eee;
 }
 
 input {
-  flex: 1;
-  padding: 8px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
+    flex: 1;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
 }
 
 button {
-  margin-left: 8px;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 10px;
-  background: #6c63ff;
-  color: white;
-  cursor: pointer;
+    margin-left: 8px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 10px;
+    background: #6c63ff;
+    color: white;
+    cursor: pointer;
 }
 </style>
 </head>
 <body>
 
 <div class="chat">
-  <div class="header">
-    <div class="avatar">🤖</div>
-    <div>Assistente Virtual</div>
-  </div>
+    <div class="header">
+        <div class="avatar">🤖</div>
+        <div>Assistente Virtual</div>
+    </div>
 
-  <div class="messages" id="messages">
-    <div class="message bot">Olá! Como posso ajudar?</div>
-  </div>
+    <div class="messages" id="messages">
+        <div class="message bot">Olá! Como posso ajudar?</div>
+    </div>
 
-  <div class="input-area">
-    <input type="text" id="input" placeholder="Digite sua pergunta...">
-    <button onclick="enviar()">Enviar</button>
-  </div>
+    <div class="input-area">
+        <input type="text" id="input" placeholder="Digite sua pergunta...">
+        <button onclick="enviar()">Enviar</button>
+    </div>
 </div>
 
 <script>
 async function enviar() {
-  const input = document.getElementById("input");
-  const mensagem = input.value.trim();
-  if (!mensagem) return;
+    const input = document.getElementById("input");
+    const mensagem = input.value.trim();
+    if (!mensagem) return;
 
-  const messages = document.getElementById("messages");
+    const messages = document.getElementById("messages");
 
-  messages.innerHTML += `<div class="message user">${mensagem}</div>`;
+    messages.innerHTML += `<div class="message user">${mensagem}</div>`;
 
-  input.value = "";
-  messages.scrollTop = messages.scrollHeight;
+    input.value = "";
+    messages.scrollTop = messages.scrollHeight;
 
-  const response = await fetch("https://thais-borges30.app.n8n.cloud/webhook/chat-bot", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ mensagem })
-  });
+    const response = await fetch("https://thais-borges30.app.n8n.cloud/webhook/chat-bot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mensagem })
+    });
 
-  const data = await response.json();
+    const data = await response.json();
 
-  messages.innerHTML += `<div class="message bot">${data.resposta}</div>`;
-  messages.scrollTop = messages.scrollHeight;
+    messages.innerHTML += `<div class="message bot">${data.resposta}</div>`;
+    messages.scrollTop = messages.scrollHeight;
 }
+
+    document.getElementById("input").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        enviar();
+    }
+    });
 </script>
 
 </body>
