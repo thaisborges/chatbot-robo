@@ -118,38 +118,35 @@ async function enviar() {
 
     const messages = document.getElementById("messages");
 
+    // Mensagem do usuário
     messages.innerHTML += `<div class="message user">${mensagem}</div>`;
-
     input.value = "";
     messages.scrollTop = messages.scrollHeight;
 
-    messages.innerHTML += `<div class="message bot" id="typing">Digitando...</div>`;
+    // Mostra digitando
+    const typingDiv = document.createElement("div");
+    typingDiv.className = "message bot";
+    typingDiv.id = "typing";
+    typingDiv.innerText = "Digitando...";
+    messages.appendChild(typingDiv);
     messages.scrollTop = messages.scrollHeight;
 
-    try {
-        const response = await fetch("https://thais-borges30.app.n8n.cloud/webhook/chat-bot", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ mensagem })
-        });
-        
-        const data = await response.json();
+    // Simulação de resposta
+    setTimeout(() => {
 
-        document.getElementById("typing").remove();
-    
-        messages.innerHTML += `<div class="message bot">${data.resposta}</div>`;
+        if (typingDiv) {
+        typingDiv.remove();
+        }
+
+        const botResponse = document.createElement("div");
+        botResponse.className = "message bot";
+        botResponse.innerText = "🤖 Teste funcionando corretamente!";
+        messages.appendChild(botResponse);
+
         messages.scrollTop = messages.scrollHeight;
-    } catch (error) {
-        document.getElementById("typing").remove();
-        menssages.innerHTML += `<div class="message bot">Desculpe, ocorreu um erro. Tente novamente.</div>`;
-    }
-}
 
-document.getElementById("input").addEventListener("keypress", function(e) {
-if (e.key === "Enter") {
-    enviar();
+    }, 1500);
 }
-});
 
 </script>
 
