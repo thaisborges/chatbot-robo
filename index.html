@@ -118,12 +118,10 @@ async function enviar() {
 
     const messages = document.getElementById("messages");
 
-    // Mensagem do usuário
     messages.innerHTML += `<div class="message user">${mensagem}</div>`;
     input.value = "";
     messages.scrollTop = messages.scrollHeight;
 
-    // Mostra digitando
     const typingDiv = document.createElement("div");
     typingDiv.className = "message bot";
     typingDiv.id = "typing";
@@ -131,23 +129,30 @@ async function enviar() {
     messages.appendChild(typingDiv);
     messages.scrollTop = messages.scrollHeight;
 
-    // Simulação de resposta
-    setTimeout(() => {
+    try {
+        const response = await fetch("SUA_URL_PRODUCTION_AQUI", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mensagem }),
+        mode: "cors"
+        });
 
-        if (typingDiv) {
+        const data = await response.json();
+
         typingDiv.remove();
-        }
 
         const botResponse = document.createElement("div");
         botResponse.className = "message bot";
-        botResponse.innerText = "🤖 Teste funcionando corretamente!";
+        botResponse.innerText = data.resposta;
         messages.appendChild(botResponse);
 
         messages.scrollTop = messages.scrollHeight;
 
-    }, 1500);
+    } catch (error) {
+        typingDiv.remove();
+        messages.innerHTML += `<div class="message bot">Erro ao conectar.</div>`;
+    }
 }
-
 </script>
 
 </body>
